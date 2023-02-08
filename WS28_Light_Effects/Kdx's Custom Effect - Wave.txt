@@ -1,0 +1,26 @@
+      - addressable_lambda:
+          name: "Kdx's Custom Effect - Wave"
+          update_interval: 17ms
+          lambda: |-
+            
+            auto rv = id(neopixel_light).remote_values;
+
+            uint8_t red = rv.get_red()*255;
+            uint8_t green = rv.get_green()*255;
+            uint8_t blue = rv.get_blue()*255;
+
+            static uint8_t new_green = 0;
+
+            static uint8_t i = 0;
+            static uint16_t i2 = 0;
+
+            static const uint8_t g_width = 2;
+            static const uint16_t g_duration = 500;
+          
+            for (i = 0; i < it.size(); i++)
+            {
+              new_green = ((sin(6.28/it.size()*i/g_width+6.28/g_duration*i2)/2.0+0.5)*green);
+              it[i] = Color(red,new_green,blue);        
+            }
+
+            if(i2++ > g_duration) i2 = 0;
